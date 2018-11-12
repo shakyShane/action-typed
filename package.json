@@ -1,12 +1,13 @@
 {
   "name": "action-typed",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Better type *safety*, with less actual *typing* for Redux actions",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
+  "files": ["dist"],
   "keywords": [
     "redux",
     "typescript",
