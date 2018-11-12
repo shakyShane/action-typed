@@ -1,12 +1,18 @@
 {
   "name": "action-typed",
   "version": "1.0.0",
-  "description": "",
+  "description": "Better type *safety*, with less actual *typing* for Redux actions",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "redux",
+    "typescript",
+    "typed",
+    "actions"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
