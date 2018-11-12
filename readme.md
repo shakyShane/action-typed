@@ -6,6 +6,14 @@
 
 https://www.youtube.com/watch?v=v263zMyVv6k
 
+## Install
+
+```bash
+npm i action-typed
+# or
+yarn add action-typed
+```
+
 ## Example
 
 **index.ts**
@@ -29,7 +37,7 @@ store.dispatch(
 **user.actions.ts**
 
 ```ts
-import {ActionHandler, msgCreator} from "../../";
+import {ActionHandler, msgCreator} from "action-typed";
 
 const messages = {
     SignedIn: (firstname: string, lastname: string) => ({firstname, lastname}),
@@ -52,7 +60,7 @@ type State = {
 
 const initialState: State = { token: "" };
 
-export function userReducer(state: State = initialState, action: Handler): State {
+export function userReducer(state = initialState, action: Handler): State { 
     switch (action.type) {
         case "Token": {
             return { ...state, token: action.payload }
