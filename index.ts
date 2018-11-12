@@ -1,21 +1,26 @@
-import {Msg} from "./user.actions";
-import {combineReducers, createStore} from "redux";
-import {userReducer} from "./user.reducer";
+type LocalReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+type EventTypeMap<T extends { [key: string]: {} }> =
+    {
+        [K in keyof T]: {
+        type: K;
+        payload: LocalReturnType<T[K]>
+    }
+    };
 
-const root = combineReducers({
-    user: userReducer
-});
+export type ActionHandler<T extends { [key: string]: {} }> =
+    EventTypeMap<T>[keyof EventTypeMap<T>]
 
-const store = createStore(root);
+export function msgCreator<Obj extends { [key: string]: (...args: any[]) => any }>(input: Obj) {
+    return function Msg<Kind extends string>(kind: Kind, ...args: Parameters<typeof input[Kind]>) {
+        const output = input[kind].apply(null, args);
+        if (output === undefined) {
+            return {type: kind}
+        }
+        return {
+            type: kind,
+            payload: input[kind].apply(null, args)
+        }
+    }
+}
 
-store.dispatch(
-    Msg("SignedIn", "shane", "osbourne")
-);
-
-store.dispatch(
-    Msg("Token", "123456")
-);
-
-store.dispatch(
-    Msg("SignOut")
-);
+export default msgCreator;

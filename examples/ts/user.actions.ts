@@ -1,4 +1,4 @@
-import {ActionHandler, createMsg} from "./types";
+import {ActionHandler, msgCreator} from "../../";
 
 const messages = {
     SignedIn: (firstname: string, lastname: string) => ({firstname, lastname}),
@@ -6,7 +6,7 @@ const messages = {
     SignOut: () => undefined,
 };
 
-const Msg = createMsg(messages);
+const Msg = msgCreator(messages);
 
 export {
     Msg,
