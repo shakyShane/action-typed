@@ -21,10 +21,12 @@
  *
  */
 export function msgCreator<Obj extends DefaultMessageDefinition>(input: Obj) {
-    return function Msg<Kind extends string>(kind: Kind, ...args: Parameters<typeof input[Kind]>) {
+    return function Msg<Kind extends string>(kind: Kind, ...args: Parameters<typeof input[Kind]>)
+        : { type: Kind, payload: LocalReturnType<typeof input[Kind]> }
+    {
         const output = input[kind].apply(null, args);
         if (output === undefined) {
-            return {type: kind}
+            return { type: kind, payload: undefined }
         }
         return {
             type: kind,
@@ -78,5 +80,5 @@ type ActionTypeMap<T extends { [key: string]: {} }> = {
  * This type will extract the inferred return type of a
  * given function (T)
  */
-type LocalReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+export type LocalReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
 
