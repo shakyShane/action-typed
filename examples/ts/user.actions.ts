@@ -1,3 +1,4 @@
+import { ActionTypeMap } from './../../index';
 import {ActionHandler, msgCreator} from "../../";
 
 const messages = {
@@ -6,8 +7,9 @@ const messages = {
     SignOut: () => undefined,
 };
 
-const Msg = msgCreator(messages);
+const Msg    = msgCreator(messages);
 
+type Msgs    = ActionTypeMap<typeof messages>
 type Handler = ActionHandler<typeof messages>
 
-export {Msg, Handler}
+export {Msg, Msgs, Handler}

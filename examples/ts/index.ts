@@ -1,4 +1,4 @@
-import {Msg} from "./user.actions";
+import {Msg, Msgs} from "./user.actions";
 import {combineReducers, createStore} from "redux";
 import {userReducer} from "./user.reducer";
 
@@ -19,3 +19,8 @@ store.dispatch(
 store.dispatch(
     Msg("SignOut")
 );
+
+// You can also use string to access types of individual actions
+type ac1 = Msgs["SignOut"];
+type ac2 = Msgs["Token"];
+type ac3 = Msgs["SignedIn"];
