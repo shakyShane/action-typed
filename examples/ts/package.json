@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "action-typed": "1.0.3",
+    "action-typed": "^1.0.5",
     "redux": "4.0.1",
     "typescript": "3.1.6"
   }

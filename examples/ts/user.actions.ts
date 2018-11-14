@@ -8,8 +8,6 @@ const messages = {
 
 const Msg = msgCreator(messages);
 
-export {
-    Msg,
-}
+type Handler = ActionHandler<typeof messages>
 
-export type Handler = ActionHandler<typeof messages>
+export {Msg, Handler}

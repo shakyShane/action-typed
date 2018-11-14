@@ -30,7 +30,7 @@ export function msgCreator<Obj extends DefaultMessageDefinition>(input: Obj) {
         }
         return {
             type: kind,
-            payload: input[kind].apply(null, args)
+            payload: output,
         }
     }
 }
