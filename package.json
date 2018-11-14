@@ -4,6 +4,7 @@
   "description": "Better type *safety*, with less actual *typing* for Redux actions",
   "main": "dist/index.js",
   "scripts": {
+    "watch": "tsc -w",
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },

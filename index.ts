@@ -69,7 +69,7 @@ export type ActionHandler<T extends { [key: string]: {} }> = ActionTypeMap<T>[ke
  * Converts the `messages` structure to type + payload, where type
  * is the original Object key, and 'payload' is the inferred return type
  */
-type ActionTypeMap<T extends { [key: string]: {} }> = {
+export type ActionTypeMap<T extends { [key: string]: {} }> = {
     [K in keyof T]: {
         type: K;
         payload: LocalReturnType<T[K]>
@@ -81,4 +81,3 @@ type ActionTypeMap<T extends { [key: string]: {} }> = {
  * given function (T)
  */
 export type LocalReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
-
