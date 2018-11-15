@@ -63,6 +63,8 @@ const root = combineReducers({
 const store = createStore(root);
 
 store.dispatch(
+    // you can't make a mistake here - the string "SignedIn" is type-safe, and it
+    // dictates what the remaining parameters should be 👌
     Msg("SignedIn", "shane", "osbourne")
 );
 ```
@@ -78,8 +80,13 @@ type State = {
 
 const initialState: State = { token: "" };
 
+//
+// this uses the helper union type that's inferred from the JS object
+//                                                           ↓
 export function userReducer(state = initialState, action: Handler): State { 
     switch (action.type) {
+        // matching "Token" here narrows the type of `action`
+        // that means you get full type-safety on the value of 'payload' 👌
         case "Token": {
             return { ...state, token: action.payload }
         }
@@ -115,6 +122,7 @@ class App extends Component<AppProps> {
 
 export default connect(
     (x: StoreState) => ({ counter: x.counter }),
+    // don't map all your separate action-creators here
     {Msg}
 )(App);
 ```
