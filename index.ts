@@ -20,9 +20,8 @@
  * Msg("Token", 12345)   // error
  *
  */
-export function msgCreator<Obj extends DefaultMessageDefinition>(input: Obj) {
-    return function Msg<Kind extends keyof Obj>(kind: Kind, ...args: Parameters<typeof input[Kind]>): { type: Kind, payload: LocalReturnType<typeof input[Kind]> }
-    {
+export function msgCreator<Obj extends Default>(input: Obj) {
+    return function Msg<Kind extends keyof Obj>(kind: Kind, ...args: Parameters<typeof input[Kind]>): {type: Kind, payload: LocalReturnType<typeof input[Kind]>} {
         const output = input[kind].apply(null, args);
         if (output === undefined) {
             return { type: kind, payload: undefined }
@@ -30,6 +29,26 @@ export function msgCreator<Obj extends DefaultMessageDefinition>(input: Obj) {
         return {
             type: kind,
             payload: output,
+        }
+    }
+}
+
+/**
+ * Added until Typescript lands better support for 
+ * 
+ */
+export function bindCreator<Obj extends Default>(input: Obj) {
+    return function MsgBind<Kind extends keyof Obj>(kind: Kind) {
+        return function Msg(...args: Parameters<typeof input[Kind]>): {type: Kind, payload: LocalReturnType<typeof input[Kind]>}
+        {
+            const output = input[kind].apply(null, args);
+            if (output === undefined) {
+                return { type: kind, payload: undefined }
+            }
+            return {
+                type: kind,
+                payload: output,
+            }
         }
     }
 }
@@ -47,7 +66,7 @@ export default msgCreator;
  * }
  *
  */
-type DefaultMessageDefinition = {
+type Default = {
     [key: string]: (...args: any[]) => any
 };
 
@@ -80,3 +99,22 @@ export type ActionTypeMap<T extends { [key: string]: {} }> = {
  * given function (T)
  */
 export type LocalReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+
+/**
+ * A helper to convert a map of names & action creators
+ * into a map of (...params) => void - this is useful
+ * when using mapDispatchToProps from redux
+ *
+ * eg:
+ *
+ * export const messages = {
+ *     Increment: (num = 1) => num,
+ *     Decrement: (num = 1) => num,
+ * };
+ *
+ * export type AsFn = AsVoidReturn<typeof messages>;
+ *
+ * AsFn["Increment"] //  (number | undefined) => void
+ */
+export type AsVoidReturn<T extends {[key: string]: (...args: any[]) => any } = {}>
+    = {[K in keyof T]: (...params: Parameters<T[K]>) => void }
