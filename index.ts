@@ -21,8 +21,7 @@
  *
  */
 export function msgCreator<Obj extends DefaultMessageDefinition>(input: Obj) {
-    return function Msg<Kind extends string>(kind: Kind, ...args: Parameters<typeof input[Kind]>)
-        : { type: Kind, payload: LocalReturnType<typeof input[Kind]> }
+    return function Msg<Kind extends keyof Obj>(kind: Kind, ...args: Parameters<typeof input[Kind]>): { type: Kind, payload: LocalReturnType<typeof input[Kind]> }
     {
         const output = input[kind].apply(null, args);
         if (output === undefined) {
