@@ -1,31 +1,40 @@
-import {msgCreator, LocalReturnType, ActionTypeMap} from "../../";
-import {tap, filter} from "rxjs/operators";
+import {createMsg, ActionMap} from "../../";
+import {tap} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {ofType} from "redux-observable";
 
-const messages = {
-    SignedIn: (firstname: string, lastname: string) => ({firstname, lastname}),
-    Token: (token: string) => token,
-    SignOut: () => undefined,
+enum User {
+    SignIn = 'User/SignIn',
+    SignOut = 'User/SignOut',
+    Token = 'User/Token',
+}
+
+type Messages = {
+    [User.SignIn]: {
+        firstname: string,
+        lastname: string
+    },
+    [User.Token]: string,
+    [User.SignOut]: undefined,
 };
 
-const Msg = msgCreator(messages);
-type Msgs = ActionTypeMap<typeof messages>;
+export const Msg    = createMsg<Messages>();
+export type TypeMap = ActionMap<Messages>;
+export type Actions = TypeMap[keyof TypeMap];
 
 function epic(action$: Observable<any>) {
     return action$.pipe(
-        customOfType(messages, "Token", "SignedIn")
+        ofType<Actions, TypeMap[User.Token]>(User.Token)
         , tap(({payload}) => {
+
             console.log(payload);
         })
     )
 }
 
-const userOfType = ofTypeCreator(messages);
-
 function epic2(action$: Observable<any>) {
     return action$.pipe(
-        userOfType("SignedIn")
+        ofType<Actions, TypeMap[User.SignIn]>(User.SignIn)
         , tap(({payload}) => {
             console.log(payload);
         })
@@ -34,33 +43,9 @@ function epic2(action$: Observable<any>) {
 
 function epic3(action$: Observable<any>) {
     return action$.pipe(
-        ofType<Msgs["SignedIn"]>("SignedIn")
+        ofType<Actions, TypeMap[User.SignIn]>(User.SignIn)
         , tap(({payload}) => {
             console.log(payload);
         })
     )
-}
-
-function ofTypeCreator<Obj extends {[index: string]: any}>(obj: Obj) {
-    return function ofType<Kind extends keyof Obj>(...keys: Kind[]) {
-        return function(source: Observable<any>): Observable<{type: Kind, payload: LocalReturnType<Obj[Kind]>}> {
-            return source.pipe(filter((x) => {
-                if (x && x.type) {
-                    return keys.indexOf(x.type) !== -1;    
-                }
-                return false;
-            }))
-        }
-    }    
-}
-
-function customOfType<Obj extends {[index: string]: any}, Kind extends keyof Obj>(obj: Obj, ...keys: Kind[]) {
-    return function(source: Observable<any>): Observable<{type: Kind, payload: LocalReturnType<Obj[Kind]>}> {
-        return source.pipe(filter((x) => {
-            if (x && x.type) {
-                return keys.indexOf(x.type) !== -1;    
-            }
-            return false;
-        }))
-    }
 }

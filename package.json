@@ -1,6 +1,6 @@
 {
   "name": "action-typed",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "description": "Better type *safety*, with less actual *typing* for Redux actions",
   "main": "dist/index.js",
   "scripts": {

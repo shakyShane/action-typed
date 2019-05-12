@@ -1,6 +1,6 @@
-import {Msg, Msgs} from "./user.actions";
-import {combineReducers, createStore} from "redux";
-import {userReducer} from "./user.reducer";
+import { combineReducers, createStore } from "redux";
+import { userReducer } from "./user.reducer";
+import { Msg, TypeMap } from "./user.actions";
 
 const root = combineReducers({
     user: userReducer
@@ -9,7 +9,7 @@ const root = combineReducers({
 const store = createStore(root);
 
 store.dispatch(
-    Msg("SignedIn", "shane", "osbourne")
+    Msg("SignedIn", { firstname: "shane", lastname: "osbourne" })
 );
 
 store.dispatch(
@@ -21,6 +21,6 @@ store.dispatch(
 );
 
 // You can also use string to access types of individual actions
-type ac1 = Msgs["SignOut"];
-type ac2 = Msgs["Token"];
-type ac3 = Msgs["SignedIn"];
+type ac1 = TypeMap["SignOut"];
+type ac2 = TypeMap["Token"];
+type ac3 = TypeMap["SignedIn"];

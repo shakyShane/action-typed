@@ -1,15 +1,11 @@
-import { ActionTypeMap } from './../../index';
-import {ActionHandler, msgCreator} from "../../";
+import {createMsg, ActionMap} from "../../index";
 
-const messages = {
-    SignedIn: (firstname: string, lastname: string) => ({firstname, lastname}),
-    Token: (token: string) => token,
-    SignOut: () => undefined,
+type Messages = {
+    SignedIn: { firstname: string, lastname: string },
+    Token: string,
+    SignOut: undefined,
 };
 
-const Msg    = msgCreator(messages);
-
-type Msgs    = ActionTypeMap<typeof messages>
-type Handler = ActionHandler<typeof messages>
-
-export {Msg, Msgs, Handler}
+export const Msg    = createMsg<Messages>();
+export type TypeMap = ActionMap<Messages>;
+export type Actions = TypeMap[keyof TypeMap];
