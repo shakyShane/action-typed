@@ -1,6 +1,6 @@
 ## Action-typed
 
-> Better type-safety, with less actual *typing* for Redux actions
+> Better type-sa<fety, with less actual *typing* for Redux a>ctions
 
 ## Install
 
@@ -9,6 +9,41 @@ npm i action-typed
 # or
 yarn add action-typed
 ```
+
+# V2 (for version 1.x, see below)
+
+Define your event types
+
+```ts
+import { ActionMap, createMsg } from 'action-typed';
+
+export enum Storage {
+    Set = 'Storage/Set',
+    Delete = 'Storage/Delete',
+}
+
+export type Messages = {
+    [Storage.Set]: { key: string; value: any; };
+    [Storage.Delete]: string;
+};
+
+export const Msg = createMsg<Messages>();
+export type TypeMap = ActionMap<Messages>;
+export type Actions = TypeMap[keyof TypeMap];
+
+```
+
+Now use `Msg` to create type-safe events:
+
+```ts
+Msg(Storage.Set, {key: 'user', value: {name: "shane"}})
+```
+
+---
+
+# V1
+
+****NOTE**** the following applies to V1 - we recommend switching to V2 above.
 
 ## Why
 
@@ -26,7 +61,7 @@ Video walkthrough if you prefer: https://www.youtube.com/watch?v=v263zMyVv6k
 - [x] Result/return types of all action creators is inferred from the implementation
 - [x] No need to write separate types - they are all generated at run time and are 100% safe
 - [x] Zero-cost library, adds nothing to your bundle size
-- [x] Action names can be strings/Ennis/consts
+- [x] Action names can be strings/enums/consts
 - [x] Namespace your actions however you like (anything that's a valid object key)
 - [x] Get type safety in action creators, components, reducers, thunks, epics or anywhere else - all derived from the same JS object
 
