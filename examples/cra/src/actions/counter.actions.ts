@@ -1,12 +1,15 @@
-import msgCreator, {ActionHandler, bindCreator, AsVoidReturn} from "../../../../";
+import {ActionMap, createMsg} from "../../../../index";
 
-export const messages = {
-    Increment: (num = 1) => num,
-    Decrement: (num = 1) => num,
+export enum Counter {
+    Increment = 'Increment',
+    Decrement = 'Decrement',
+}
+
+export type Messages = {
+    [Counter.Increment]: number,
+    [Counter.Decrement]: number,
 };
 
-export const Msg = msgCreator(messages);
-export const MsgBind = bindCreator(messages);
-
-export type AsFn = AsVoidReturn<typeof messages>;
-export type Handler = ActionHandler<typeof messages>;
+export const Msg = createMsg<Messages>();
+export type TypeMap = ActionMap<Messages>;
+export type Handler = TypeMap[keyof TypeMap];
